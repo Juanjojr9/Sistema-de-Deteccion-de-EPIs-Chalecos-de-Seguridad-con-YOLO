@@ -34,11 +34,48 @@ El sistema integra dos modelos de Deep Learning para realizar las siguientes tar
 
 ---
 
+## 📚 Dataset Utilizado
+
+Para el entrenamiento del modelo de detección de chalecos, se ha utilizado un dataset público de alta calidad proporcionado por **Roboflow Universe**:
+
+*   **Nombre:** Safety Vests
+*   **Autor:** Roboflow Universe Projects
+*   **Versión utilizada:** v13
+*   **Enlace:** [Ver Dataset en Roboflow](https://universe.roboflow.com/roboflow-universe-projects/safety-vests/dataset/13)
+
+Este dataset fue exportado en formato **YOLOv11** y contiene imágenes variadas de entornos de construcción y fábricas, lo que garantiza una buena generalización del modelo.
+
+---
+
+## 🧠 Arquitectura y Metodología
+
+El núcleo del sistema (`main.py`) opera mediante una **arquitectura de doble modelo** secuencial:
+
+### 1. Modelos de Inferencia
+*   **Modelo A (Personas):** Se utiliza `yolo11n.pt` preentrenado en COCO para detectar la clase `person`. Esto garantiza generalización en la detección de humanos.
+*   **Modelo B (Chalecos):** Se utiliza un modelo personalizado (`yolo11n_train_v1.pt`) entrenado específicamente para detectar la clase `safety_vest`.
+
+### 2. Lógica de Negocio (Intersection over Union)
+Para evitar falsos positivos (ej. detectar un chaleco colgado en una silla), el sistema aplica lógica geométrica:
+1.  Se extraen las cajas delimitadoras (*bounding boxes*) de personas y chalecos.
+2.  Se calcula la **Intersección sobre el Área del Chaleco**:
+    $$ \text{Overlap} = \frac{\text{Área Intersección}}{\text{Área del Chaleco}} $$
+3.  Si la superposición supera el **Umbral (IoU > 0.5)**, se considera que la persona *lleva puesto* el chaleco.
+
+### 3. Filtrado de Falsos Positivos
+Se implementan filtros estrictos para limpiar la detección:
+*   Filtro por **Clase**: Solo se aceptan detecciones de la clase `1` (Safety Vest), ignorando la clase `0` (No Vest) del dataset para evitar conflictos.
+*   Filtro por **Confianza**: Se requiere una certeza > 60% para considerar un chaleco válido.
+
+---
+
+---
+
 ## 📂 Estructura del Proyecto
 
 ```text
-├── dataset/                # Imágenes de prueba para validar el sistema
-│   └── test/images/        # Conjunto de imágenes de test
+├── dataset/                # Imágenes para entrenar, validad y testear
+│   
 ├── modelos/                # Pesos de los modelos entrenados
 │   ├── yolo11n.pt          # Modelo base (Personas)
 │   ├── yolo11n_train_v1.pt # Modelo custom entrenado (Chalecos)
