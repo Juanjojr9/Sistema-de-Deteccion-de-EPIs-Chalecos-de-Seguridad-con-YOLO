@@ -1,0 +1,13 @@
+# Núcleo del proyecto
+ultralytics>=8.3.0
+roboflow>=1.1.0
+opencv-python>=4.10.0
+numpy>=1.23.0
+
+# Análisis de datos y gráficas (Scripts de comparación)
+pandas>=2.0.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Utilidades para Notebooks (IPython.display)
+ipython>=8.0.0
