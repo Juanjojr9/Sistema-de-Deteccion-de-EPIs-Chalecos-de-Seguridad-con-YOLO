@@ -46,6 +46,6 @@ El sistema integra dos modelos de Deep Learning para realizar las siguientes tar
 ├── entrenamientos/         # (Opcional) Logs y gráficas del entrenamiento
 ├── main.py                 # Script principal de ejecución
 ├── entrenamiento_colab.ipynb # Notebook usado para entrenar el modelo en la nube
-├── comparativa_modelos.ipynb # Notebook para analizar métricas entre modelos
+├── comparativa.ipynb # Notebook para analizar métricas entre modelos
 ├── requirements.txt        # Dependencias del proyecto
 └── README.md               # Documentación
